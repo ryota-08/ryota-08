@@ -1,0 +1,75 @@
+
+##スクレイピングをする。
+
+import requests
+import time
+from bs4 import BeautifulSoup
+import urllib.parse
+
+#身元を教える（あなたの情報（確認くん） - UGTOP）←おすすめ
+headers = {"hogehoge"}
+
+
+data=[]
+
+for i in range(1,3):
+    #URLを記入ーstrにすること注意
+    url = "hogehogehoge"
+    #URLから情報をいただく　resを表示して　200が出たら成功　403が出てきたら失敗
+    res = requests.get(url)
+    #BS４を使ってhtmlを解析する　soupすると解析結果が見れる
+    soup = BeautifulSoup(res.text, 'html.parser')
+    #スープからクラス指定
+    blocks = soup.find_all("div", attrs={"class": "hogehoge"})
+    
+    for block in blocks:
+        block_name = block.find("div", attrs={"class": "hogehoge"})
+        block_name = block_name.text
+        
+        #それぞれの企業のURL要素
+        conpany_URL = block.find("a", attrs={"class": "hogehoge"})
+        conpany_URL
+        #links = conpany_URL.select('a')
+        linke = conpany_URL.get("href")
+        
+        #企業ごとのURLに飛ぶ＆住所を出す
+        #URLの結合
+        linked = urllib.parse.urljoin('hogehoge', linke)
+        #結合したURL2の検索
+        res = requests.get(linked)
+        soup2 = BeautifulSoup(res.text, 'html.parser')
+
+        live_tell = soup2.find_all("span", attrs={"class": "hogehoge"})
+        tell = live_tell[0]
+        tell = tell.text
+        live = live_tell[1]
+        live = live.text.replace("\n","")
+
+        #企業のURL情報を取得
+        conpany_HP_tag = soup2.find("span", attrs={"class": "hogehoge"})
+        conpany_HP = conpany_HP_tag.find('a')
+        conpany_HP = conpany_HP.get("href")
+
+        details = {}
+        details['企業名'] = block_name
+        details['電話番号']= tell
+        details['住所']= live
+        details['HP']= conpany_HP
+        data.append(details)
+        time.sleep(2)
+    time.sleep(2)
+
+import pandas as pd
+from IPython.core.display import display, HTML
+df = pd.DataFrame(data) 
+
+#csvファイルをダウンロードできるようにする。
+def download(df):
+   # csv方式で表せるようにする
+    df.to_csv("def download(df):
+   # csv方式で表せるようにする
+    df.to_csv("encourage.csv")
+    display(HTML('<a download="hogehoge.csv" href="hogehoge.csv">Download</a>'))
+    
+#行と列を逆にした形で表記
+download(df)
